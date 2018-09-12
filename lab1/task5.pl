@@ -36,8 +36,15 @@ parent(X,Y) :-
 parent(X,Y) :-
     mother(X,Y).
 
-ancestor(X,Y) :-
-    parent(Y,X).
+% X is the ancestor to Y
+% base case
+ancestor(X,Y):-
+        parent(X,Y). % X is the parent to Y
+        
+% recursion case        
+ancestor(X,Y):-
+        parent(Z,Y),
+        ancestor(X,Z).
 
 grandfather(X,Y) :-
     man(X),
@@ -51,14 +58,6 @@ uncle(X,Y) :-
     parent(Z,W),
     parent(W,Y),
     dif(X,W).
-    
-/*this rule was added to list aunt's husband as an uncle. Though, it brings the infinity output, it does not require adding any additional rules*/    
-uncle(X,Y) :-  
-    man(X),
-    aunt(Z,Y),
-    parent(Z,W),
-    parent(X,W),
-    dif(X,Z).    
 
 aunt(X,Y) :-
     woman(X),
@@ -66,11 +65,3 @@ aunt(X,Y) :-
     parent(Z,W),
     parent(W,Y),
     dif(X,W).
-
-/*same as uncle above*/
-aunt(X,Y) :-
-    woman(X),
-    uncle(Z,Y),
-    parent(Z,W),
-    ancestor(W,X),
-    dif(X,Z).
